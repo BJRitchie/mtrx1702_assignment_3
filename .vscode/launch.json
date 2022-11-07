@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": true,
+      "externalConsole": false,
+      "cwd": "/Users/benritchie/Library/Mobile Documents/com~apple~CloudDocs/Uni Stuff/MTRX1702 coding in C/mtrx1702_assignment_3",
+      "program": "/Users/benritchie/Library/Mobile Documents/com~apple~CloudDocs/Uni Stuff/MTRX1702 coding in C/mtrx1702_assignment_3/build/Debug/outDebug",
+      "MIMode": "gdb"
+    }
+  ]
+}

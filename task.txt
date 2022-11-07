@@ -1,0 +1,112 @@
+Summary of assignment description:
+
+information for each point:
+topographic height:
+- height of the terrain
+- rover cannot traverse areas of high slope (diff in height)
+
+terrain type
+- range from 0-3
+- 0 is the easiest
+- 3 is not traversable
+
+science goal
+- true or false
+
+rover position
+- default is given
+- actual position is stored in bit as true or false
+
+checksum
+- indicates if the sum of the other 7 bits is even 
+or odd (even = 0, odd = 1) 
+- total sum should always be even
+
+
+tasks;
+1. decode the binary data
+    - detect and correct for errors that have occured 
+    during message transmission
+    - determine:
+        1. the x,y grid cell location of the rover
+            - use the grid cell data unless it is corrupted, then use the default position
+
+        2. list of x,y grid cell locations for each science goal
+            - accepted only if it is error-free
+
+        3. 2D array of (unsigned char) of topographic height in meters
+            - 128x128 matrix
+            - if cell is affected by an error, use 3x3 filter
+            - most-commonly occuring (non corrupted) value is accepted
+
+        4. 2D array (unsigned char) of terrain type
+
+
+Evaluating Rover Path
+- driving commands are entered as a sequence of rover driving commands 
+in ASCII format
+"forward <distance>"
+"backwards <distance>"
+"left <amount>"
+"right <amount>"
+"end" (no further trajectory commands)
+
+task:
+- take the proposed path and:
+    a. determine feasibility
+        - infeasible if:
+            - traverses any type 3 terrain
+            - slope > 1.5 (slope being absolute difference)
+            - takes the rover outside the 128x128 operating area
+
+    b. determine total energy required to complete the path
+        - for terrain:
+            - 0: 1u
+            - 1: 2u
+            - 2: 4u
+        - sloped terrain:
+            - 10u per 1m change in topographic height
+
+Determine if a feasible path exists:
+- use a depth-first or breadth-first search
+
+command line inputs:
+Map Query Mode:
+"./rover m <mapfilename> <x> <y>"
+- return the info on the position at x,y:
+"Grid cell (x=34, y=56)
+Topo height: 5m
+Terrain type: 2"
+
+if relevant:
+"Specified location is a science goal
+Specified location is initial rover position"
+
+
+Path Check Mode (mode "c"):
+./rover c <mapfilename>
+- take inputs to the stdin and if relevant: 
+"Path is not feasible
+Last feasible position: (x=X, y=Y)"
+
+"Path is feasible
+Energy required to complete path: E"
+
+
+Check Feasible Mode (mode "f"):
+./rover f <mapfilename> <i>
+- i is the index (0 to N-1) for the N science goals provided in the map
+- if applicable:
+"Feasible path exists."
+"There are no feasible paths to this location."
+
+checking for input errors:
+any errors:
+"Input error: unable to process data/commands."
+
+Input errors include:
+- Any other option encounted for the first argument which is not in {m, c, f}
+- <mapfilename> does not exist
+- Specified coordinates <x> <y> are not in the map
+- Specified science goal <i> is beyond the number of science goals found
+
